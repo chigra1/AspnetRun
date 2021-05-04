@@ -21,6 +21,8 @@ using AspnetRun.Core.Repositories;
 using AspnetRun.Core.Repositories.Base;
 using AspnetRun.Core.Configuration;
 using AspnetRun.Infrastructure.Repository.Base;
+using AspnetRun.Application.Dnu_Logic;
+using AspnetRun.Application.Dnu_DataConversions;
 
 namespace AspnetRun.Web
 {
@@ -73,6 +75,9 @@ namespace AspnetRun.Web
             {
                 endpoints.MapRazorPages();
             });
+
+            UdpStarter test = new UdpStarter();
+            test.StartListeningPorts(1, 7000);
         }
 
         private void ConfigureAspnetRunServices(IServiceCollection services)
@@ -90,7 +95,8 @@ namespace AspnetRun.Web
             // Add Application Layer
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<ICategoryService, CategoryService>();
-
+            services.AddScoped<IfType, DataMerenja>();
+            
             // Add Web Layer
             services.AddAutoMapper(typeof(Startup)); // Add AutoMapper
             services.AddScoped<IIndexPageService, IndexPageService>();

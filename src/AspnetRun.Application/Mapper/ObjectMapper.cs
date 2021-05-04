@@ -26,8 +26,7 @@ namespace AspnetRun.Application.Mapper
     {
         public AspnetRunDtoMapper()
         {
-            CreateMap<Product, ProductModel>()
-                .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.ProductName)).ReverseMap();
+            CreateMap<Product, ProductModel>().ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.ProductName)).ReverseMap();
 
             CreateMap<Category, CategoryModel>().ReverseMap();
         }
