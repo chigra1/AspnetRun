@@ -29,9 +29,13 @@ namespace AspnetRun.Application.Dnu_Logic
 
         }
     }
-    public class UdpStarter
+    public class UdpStarter : IUdpStarter
     {
-
+        private readonly IUdpReceiver _udpReceiver;
+        public UdpStarter(IUdpReceiver udpReceiver)
+        {
+            _udpReceiver = udpReceiver;
+        }
         public bool StartListeningPorts(int numberOfPorts, int startingPort)
         {
             Console.WriteLine($"Openning {numberOfPorts} ports ******************");
@@ -44,9 +48,7 @@ namespace AspnetRun.Application.Dnu_Logic
             UdpReceiver[] rec_port = new UdpReceiver[numberOfPorts];
             for (int i = 0; i < numberOfPorts; i++)
             {
-                rec_port[i] = new UdpReceiver();
-                rec_port[i].ReceiveMessages(port_offset + i);
-
+                _udpReceiver.ReceiveMessages(port_offset + i);
             } 
             
             

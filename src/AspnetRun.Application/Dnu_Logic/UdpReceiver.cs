@@ -1,5 +1,7 @@
 ﻿
 using AspnetRun.Application.Dnu_Formating;
+using AspnetRun.Application.Interfaces;
+using AspnetRun.Application.Models;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -9,7 +11,7 @@ using System.Threading;
 
 namespace AspnetRun.Application.Dnu_Logic
 {
-    class UdpReceiver
+   public class UdpReceiver : IUdpReceiver
     {
 
         public struct UdpState
@@ -23,8 +25,11 @@ namespace AspnetRun.Application.Dnu_Logic
         public UdpClient u;
         public UdpState s;
         int s_listenPort;
-        public UdpReceiver()
+
+        private readonly IProductService _productService;
+        public UdpReceiver(IProductService productService)
         {
+            _productService = productService;
         }
         public void ReceiveCallback(IAsyncResult ar)
         {
@@ -50,7 +55,12 @@ namespace AspnetRun.Application.Dnu_Logic
 
                 messageReceived = true;
 
-                rcv.SaveRealDataToDbAsync("127.0.0.1");
+                var product =  _productService.GetProductById(1);
+                product.Wait();
+                //product.UnitPrice = 101;
+                //await _productService.Update(product);
+
+                //rcv.SaveRealDataToDbAsync("127.0.0.1");
                 /*
                 Thread.Sleep(5000);
 
@@ -83,7 +93,7 @@ namespace AspnetRun.Application.Dnu_Logic
             // Do some work while we wait for a message. For this example, we'll just sleep
             //while (!messageReceived)
             //{
-             //   Thread.Sleep(100);
+            //    Thread.Sleep(10000);
             //}
         }
 

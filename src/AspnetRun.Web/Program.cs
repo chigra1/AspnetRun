@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AspnetRun.Infrastructure.Data;
+using AspnetRun.Web.BackgroundServiceHelper;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -25,7 +26,10 @@ namespace AspnetRun.Web
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>();
+                .UseStartup<Startup>()
+            .ConfigureServices(services => {
+                services.AddHostedService<ReceiveMessageBackgroundTask>();
+            });
 
         private static void SeedDatabase(IWebHost host)
         {

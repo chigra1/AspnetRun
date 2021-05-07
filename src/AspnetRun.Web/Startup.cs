@@ -23,6 +23,7 @@ using AspnetRun.Core.Configuration;
 using AspnetRun.Infrastructure.Repository.Base;
 using AspnetRun.Application.Dnu_Logic;
 using AspnetRun.Application.Dnu_DataConversions;
+using Hangfire;
 
 namespace AspnetRun.Web
 {
@@ -76,8 +77,10 @@ namespace AspnetRun.Web
                 endpoints.MapRazorPages();
             });
 
-            UdpStarter test = new UdpStarter();
-            test.StartListeningPorts(1, 7000);
+            //BackgroundJob.Enqueue<UdpStarter>(x => x.StartListeningPorts(1, 7000));
+
+            //UdpStarter test = new UdpStarter();
+            //test.StartListeningPorts(1, 7000);
         }
 
         private void ConfigureAspnetRunServices(IServiceCollection services)
@@ -107,6 +110,9 @@ namespace AspnetRun.Web
             services.AddHttpContextAccessor();
             services.AddHealthChecks()
                 .AddCheck<IndexPageHealthCheck>("home_page_health_check");
+
+            services.AddScoped<IUdpStarter, UdpStarter>();
+            services.AddScoped<IUdpReceiver, UdpReceiver>();
         }
 
         public void ConfigureDatabases(IServiceCollection services)
