@@ -12,18 +12,9 @@ using System.Threading.Tasks;
 
 namespace AspnetRun.Application.Dnu_DataConversions
 {
-    public class DataMerenja : IfType
+    public static class DataMerenja 
     {
 
-        private readonly IProductService _productAppService;
-        public DataMerenja()
-        {
-        }
-        public DataMerenja(IProductService productAppService)
-        {
-            _productAppService = productAppService ?? throw new ArgumentNullException(nameof(productAppService));
-            
-        }
 
         //private readonly IpmsDbContext _context;
         /*
@@ -49,18 +40,18 @@ namespace AspnetRun.Application.Dnu_DataConversions
         
              */
 
-        private int len = 35;
-        public int getDataLength()
+        private static int len = 35;
+        public static int getDataLength()
         {
             return len;
         }
-        public int getFieldLength()
+        public static int getFieldLength()
         {
             return len;
         }
 
 
-        public object getRealData(byte[] data)
+        public static object getRealData(byte[] data)
         {
             object res = extractData(data);
 
@@ -68,7 +59,7 @@ namespace AspnetRun.Application.Dnu_DataConversions
 
         }
 
-        public string ToStringRealData(byte[] data)
+        public static string ToStringRealData(byte[] data)
         {
             string real="";
             decimal[] temp = (decimal[])getRealData(data);
@@ -77,7 +68,7 @@ namespace AspnetRun.Application.Dnu_DataConversions
             return real;
         }
 
-        public byte[] setFieldData(string strData)
+        public static byte[] setFieldData(string strData)
         {
             int val = Convert.ToInt16(strData);
             byte[] data = new byte[1] { (byte)(val) };
@@ -86,14 +77,14 @@ namespace AspnetRun.Application.Dnu_DataConversions
             return data;
         }
 
-        public byte[] setFieldType()
+        public static byte[] setFieldType()
         {
             byte[] hex = BitConverter.GetBytes((short)Packet.DataType.Merenja);
             //byte[] res = Packet.HexNiblleToAsciiByte(hex);
             return hex;
         }
 
-        private decimal[] extractData(byte[] data)
+        private static decimal[] extractData(byte[] data)
         {
             decimal[] merenje = new decimal[17];
             merenje[0] = (data[1] + data[0] * 256) * ((decimal)60 / 1024);
@@ -117,7 +108,7 @@ namespace AspnetRun.Application.Dnu_DataConversions
             merenje[15] = (data[33] + data[32] * 256) * ((decimal)300 / 1024);
             return merenje;
         }
-        public bool checkMinMax(string input, string min, string max)
+        public static bool checkMinMax(string input, string min, string max)
         {
             //if (min == "" && max == "")
             //    return true;
@@ -142,7 +133,7 @@ namespace AspnetRun.Application.Dnu_DataConversions
             return false;
         }
 
-        public bool checkStringPattern(string text)
+        public static bool checkStringPattern(string text)
         {
             if (text == null || text == "")
                 return false;
@@ -151,20 +142,6 @@ namespace AspnetRun.Application.Dnu_DataConversions
             Match m = Regex.Match(text, pattern);
             string res = m.Value;
             return m.Success;
-        }
-
-        public async Task<bool> SaveToDbAsync(byte[] data,string address)
-        {
-            decimal[] merenja = extractData(data);
-            //get id of device
-
-            ProductModel product = await _productAppService.GetProductById(1);
-            //await Update(product);
-            //save
-            product.UnitPrice = 101;
-            await _productAppService.Update(product);
-
-            return true;
         }
 
     }
