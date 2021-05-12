@@ -98,7 +98,6 @@ namespace AspnetRun.Web
             // Add Application Layer
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<ICategoryService, CategoryService>();
-            services.AddScoped<IfType, DataMerenja>();
             
             // Add Web Layer
             services.AddAutoMapper(typeof(Startup)); // Add AutoMapper

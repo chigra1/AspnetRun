@@ -16,9 +16,6 @@ namespace AspnetRun.Application.Dnu_DataConversions
 
             switch (type)
             {
-                case Packet.DataType.Merenja:
-                    return new DataMerenja();
-
                 case Packet.DataType.RAW:
                     return new DataRAW();
 
